@@ -12,84 +12,59 @@
 
 <body>
 
-    <div class="login-container">
+    <div class="container">
+        <h1>Student Registrations</h1>
+        <p class="subtitle">Enter your details to register</p>
 
-        <div class="login-card">
+        <form id="registrationForm">
 
-            <div class="logo">
-                SPMS
-            </div>
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" required>
 
-            <h1>Student Login</h1>
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
 
-            <p class="subtitle">
-                Smart Placement Management System
-            </p>
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Enter 10-digit phone number"
+                   maxlength="10" required>
 
-            <form id="loginForm">
+            <label for="college">College Name</label>
+            <input type="text" id="college" placeholder="Enter your college name" required>
 
-                <div class="form-group">
+            <label for="course">Course</label>
+            <select id="course" required>
+                <option value="">Select Course</option>
+                <option value="B.Tech">B.Tech</option>
+                <option value="B.E">B.E</option>
+                <option value="BCA">BCA</option>
+                <option value="MCA">MCA</option>
+                <option value="M.Tech">M.Tech</option>
+            </select>
 
-                    <label for="email">
-                        Student Email
-                    </label>
+            <label for="branch">Branch</label>
+            <select id="branch" required>
+                <option value="">Select Branch</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Science">Information Science</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil">Civil</option>
+            </select>
 
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Enter your email"
-                    >
+            <label for="year">Year of Study</label>
+            <select id="year" required>
+                <option value="">Select Year</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+            </select>
 
-                    <small id="emailError"></small>
+            <button type="submit">Register</button>
 
-                </div>
+        </form>
 
-                <div class="form-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Enter your password"
-                    >
-
-                    <small id="passwordError"></small>
-
-                </div>
-
-                <div class="forgot-password">
-
-                    <a href="#">
-                        Forgot Password?
-                    </a>
-
-                </div>
-
-                <button type="submit" class="login-btn">
-                    Login
-                </button>
-
-                <p id="loginMessage"></p>
-
-            </form>
-
-            <p class="register-text">
-
-                Don't have an account?
-
-                <a href="#">
-                    Register
-                </a>
-
-            </p>
-
-        </div>
-
+        <div id="message"></div>
     </div>
 
     <script src="js/login.js"></script>

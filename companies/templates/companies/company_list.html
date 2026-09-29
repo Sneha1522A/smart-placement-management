@@ -1,0 +1,128 @@
+{% extends 'companies/base.html' %}
+
+{% block title %}Companies List{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Company Management</h1>
+        <p class="page-subtitle">Manage campus recruiting partners, job roles, packages, and eligibility criteria</p>
+    </div>
+    <div>
+        <a href="{% url 'companies:company_create' %}" class="btn btn-primary">
+            + Add New Company
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <!-- Header with Search & Counter -->
+    <div class="card-header">
+        <form method="GET" action="{% url 'companies:company_list' %}" class="search-form">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ search_query }}" 
+                placeholder="Search by company or job role..." 
+                class="search-input"
+            >
+            <button type="submit" class="btn btn-secondary btn-sm">Search</button>
+            {% if search_query %}
+            <a href="{% url 'companies:company_list' %}" class="btn btn-secondary btn-sm">Reset</a>
+            {% endif %}
+        </form>
+        <div style="font-size: 0.875rem; color: var(--text-secondary); font-weight: 500;">
+            Total Registered: <strong>{{ companies|length }}</strong>
+        </div>
+    </div>
+
+    <!-- Company Table -->
+    <div class="table-responsive">
+        {% if companies %}
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Job Role</th>
+                    <th>Package (LPA)</th>
+                    <th>Min CGPA</th>
+                    <th>Deadline</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for company in companies %}
+                <tr>
+                    <td>
+                        <div class="company-title-cell">
+                            <div class="company-avatar">
+                                {{ company.name|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <strong style="color: var(--text-primary);">{{ company.name }}</strong>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span style="font-weight: 500;">{{ company.job_role }}</span>
+                    </td>
+                    <td>
+                        <span class="badge badge-package">
+                            ₹ {{ company.package_lpa }} LPA
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge badge-cgpa">
+                            &ge; {{ company.min_cgpa }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge badge-deadline">
+                            {{ company.deadline|date:"M d, Y" }}
+                        </span>
+                    </td>
+                    <td style="text-align: right;">
+                        <div class="action-buttons" style="justify-content: flex-end;">
+                            <a href="{% url 'companies:company_update' company.pk %}" class="btn btn-secondary btn-sm" title="Edit company details">
+                                Edit
+                            </a>
+                            <button 
+                                type="button" 
+                                class="btn btn-danger btn-sm btn-delete-trigger" 
+                                data-company-id="{{ company.pk }}"
+                                data-company-name="{{ company.name }}"
+                                data-delete-url="{% url 'companies:company_delete' company.pk %}"
+                                title="Delete company"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">&#127970;</div>
+            {% if search_query %}
+            <h3 class="empty-title">No companies found matching "{{ search_query }}"</h3>
+            <p>Try searching with another keyword or clear the search filter.</p>
+            <div style="margin-top: 1rem;">
+                <a href="{% url 'companies:company_list' %}" class="btn btn-secondary btn-sm">Clear Search</a>
+            </div>
+            {% else %}
+            <h3 class="empty-title">No companies added yet</h3>
+            <p>Get started by registering your first hiring partner company.</p>
+            <div style="margin-top: 1.25rem;">
+                <a href="{% url 'companies:company_create' %}" class="btn btn-primary">
+                    + Add First Company
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

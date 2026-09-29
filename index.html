@@ -28,6 +28,7 @@
 
             <form id="loginForm">
 
+                <!-- Student Email -->
                 <div class="form-group">
 
                     <label for="email">
@@ -45,6 +46,8 @@
 
                 </div>
 
+
+                <!-- Password -->
                 <div class="form-group">
 
                     <label for="password">
@@ -60,8 +63,15 @@
 
                     <small id="passwordError"></small>
 
+                    <p class="password-hint">
+                        Password must contain at least 8 characters,
+                        one capital letter, one number, and one special character.
+                    </p>
+
                 </div>
 
+
+                <!-- Forgot Password -->
                 <div class="forgot-password">
 
                     <a href="#">
@@ -70,14 +80,22 @@
 
                 </div>
 
-                <button type="submit" class="login-btn">
+
+                <!-- Login Button -->
+                <button
+                    type="submit"
+                    class="login-btn">
                     Login
                 </button>
 
+
+                <!-- Login Message -->
                 <p id="loginMessage"></p>
 
             </form>
 
+
+            <!-- Register -->
             <p class="register-text">
 
                 Don't have an account?
@@ -92,6 +110,8 @@
 
     </div>
 
+
+    <!-- JavaScript -->
     <script src="js/login.js"></script>
 
 </body>

@@ -1,0 +1,540 @@
+{% extends "base.html" %}
+
+{% block title %}Job Management - Smart Placement Management System{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Header Section */
+    .page-header {
+        margin-bottom: 1.75rem;
+    }
+
+    .page-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-main);
+        letter-spacing: -0.02em;
+    }
+
+    .page-subtitle {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 0.25rem;
+    }
+
+    /* Layout Grid */
+    .layout-grid {
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        gap: 1.75rem;
+        align-items: start;
+    }
+
+    @media (max-width: 992px) {
+        .layout-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Cards */
+    .card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        background-color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-main);
+    }
+
+    .card-count-badge {
+        background-color: var(--primary-light);
+        color: var(--primary-color);
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.825rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Form Styles */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.15rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full-width {
+        grid-column: span 2;
+    }
+
+    @media (max-width: 480px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        .form-group.full-width {
+            grid-column: span 1;
+        }
+    }
+
+    .form-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 0.35rem;
+    }
+
+    .required-star {
+        color: var(--error-color);
+        margin-left: 2px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        background-color: #ffffff;
+        color: var(--text-main);
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        font-family: inherit;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: var(--focus-ring);
+    }
+
+    .form-group.has-error .form-control {
+        border-color: var(--error-color);
+        background-color: #fffbfb;
+    }
+
+    .form-help {
+        font-size: 0.775rem;
+        color: var(--text-muted);
+        margin-top: 0.25rem;
+    }
+
+    .field-error-list {
+        margin-top: 0.3rem;
+    }
+
+    .field-error-msg {
+        display: block;
+        color: var(--error-color);
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: var(--primary-color);
+        color: #ffffff;
+        border: none;
+        border-radius: var(--radius-md);
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        margin-top: 0.5rem;
+    }
+
+    .btn-submit:hover {
+        background-color: var(--primary-hover);
+    }
+
+    .btn-submit:active {
+        transform: translateY(1px);
+    }
+
+    /* Table Styles */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .jobs-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    .jobs-table th {
+        background-color: #f1f5f9;
+        color: var(--text-muted);
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .jobs-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        vertical-align: top;
+    }
+
+    .jobs-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .jobs-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    /* Role Column Details */
+    .job-title-text {
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 0.975rem;
+    }
+
+    .company-name {
+        color: var(--primary-color);
+        font-weight: 500;
+        font-size: 0.875rem;
+        margin-top: 0.1rem;
+    }
+
+    .meta-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-top: 0.4rem;
+    }
+
+    .pill {
+        display: inline-block;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background-color: #f1f5f9;
+        color: var(--text-muted);
+    }
+
+    .pill-package {
+        background-color: #fef3c7;
+        color: #92400e;
+        font-weight: 600;
+    }
+
+    .pill-type {
+        background-color: #e0e7ff;
+        color: #3730a3;
+    }
+
+    /* Status Badges */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.25rem 0.65rem;
+        border-radius: 20px;
+        font-size: 0.775rem;
+        font-weight: 600;
+    }
+
+    .badge-open {
+        background-color: var(--badge-open-bg);
+        color: var(--badge-open-text);
+    }
+
+    .badge-closed {
+        background-color: var(--badge-closed-bg);
+        color: var(--badge-closed-text);
+    }
+
+    .badge-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: currentColor;
+    }
+
+    /* Empty State */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+        color: #cbd5e1;
+    }
+
+    .empty-title {
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .empty-desc {
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Job management</h1>
+    <p class="page-subtitle">Post new placement opportunities and monitor active campus recruitment drives.</p>
+</div>
+
+<div class="layout-grid">
+    <!-- Left Panel: Form -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Post a new job</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'jobs:job_management' %}" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="field-error-list" style="margin-bottom: 1rem;">
+                        {% for error in form.non_field_errors %}
+                            <span class="field-error-msg">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Title & Company -->
+                <div class="form-group {% if form.title.errors %}has-error{% endif %}">
+                    <label for="{{ form.title.id_for_label }}" class="form-label">
+                        Job Title <span class="required-star">*</span>
+                    </label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <div class="field-error-list">
+                            {% for error in form.title.errors %}
+                                <span class="field-error-msg">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group {% if form.company.errors %}has-error{% endif %}">
+                    <label for="{{ form.company.id_for_label }}" class="form-label">
+                        Company Name <span class="required-star">*</span>
+                    </label>
+                    {{ form.company }}
+                    {% if form.company.errors %}
+                        <div class="field-error-list">
+                            {% for error in form.company.errors %}
+                                <span class="field-error-msg">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Grid for Location & Job Type -->
+                <div class="form-grid">
+                    <div class="form-group {% if form.location.errors %}has-error{% endif %}">
+                        <label for="{{ form.location.id_for_label }}" class="form-label">
+                            Location <span class="required-star">*</span>
+                        </label>
+                        {{ form.location }}
+                        {% if form.location.errors %}
+                            <div class="field-error-list">
+                                {% for error in form.location.errors %}
+                                    <span class="field-error-msg">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group {% if form.job_type.errors %}has-error{% endif %}">
+                        <label for="{{ form.job_type.id_for_label }}" class="form-label">
+                            Job Type <span class="required-star">*</span>
+                        </label>
+                        {{ form.job_type }}
+                        {% if form.job_type.errors %}
+                            <div class="field-error-list">
+                                {% for error in form.job_type.errors %}
+                                    <span class="field-error-msg">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Package & Min CGPA -->
+                <div class="form-grid">
+                    <div class="form-group {% if form.package.errors %}has-error{% endif %}">
+                        <label for="{{ form.package.id_for_label }}" class="form-label">
+                            Package / CTC
+                        </label>
+                        {{ form.package }}
+                        {% if form.package.errors %}
+                            <div class="field-error-list">
+                                {% for error in form.package.errors %}
+                                    <span class="field-error-msg">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group {% if form.min_cgpa.errors %}has-error{% endif %}">
+                        <label for="{{ form.min_cgpa.id_for_label }}" class="form-label">
+                            Min CGPA <span class="required-star">*</span>
+                        </label>
+                        {{ form.min_cgpa }}
+                        {% if form.min_cgpa.errors %}
+                            <div class="field-error-list">
+                                {% for error in form.min_cgpa.errors %}
+                                    <span class="field-error-msg">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Eligible Branches -->
+                <div class="form-group {% if form.eligible_branches.errors %}has-error{% endif %}">
+                    <label for="{{ form.eligible_branches.id_for_label }}" class="form-label">
+                        Eligible Branches <span class="required-star">*</span>
+                    </label>
+                    {{ form.eligible_branches }}
+                    <small class="form-help">Comma-separated list (e.g. CSE, ECE, ISE, ME)</small>
+                    {% if form.eligible_branches.errors %}
+                        <div class="field-error-list">
+                            {% for error in form.eligible_branches.errors %}
+                                <span class="field-error-msg">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Deadline -->
+                <div class="form-group {% if form.deadline.errors %}has-error{% endif %}">
+                    <label for="{{ form.deadline.id_for_label }}" class="form-label">
+                        Application Deadline <span class="required-star">*</span>
+                    </label>
+                    {{ form.deadline }}
+                    {% if form.deadline.errors %}
+                        <div class="field-error-list">
+                            {% for error in form.deadline.errors %}
+                                <span class="field-error-msg">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="form-group {% if form.description.errors %}has-error{% endif %}">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">
+                        Job Description <span class="required-star">*</span>
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="field-error-list">
+                            {% for error in form.description.errors %}
+                                <span class="field-error-msg">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-submit">Post Job</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Panel: Job Postings Table -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Job postings</h2>
+            <span class="card-count-badge">{{ jobs|length }} total</span>
+        </div>
+        <div class="table-container">
+            {% if jobs %}
+                <table class="jobs-table">
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Eligibility</th>
+                            <th>Deadline</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for job in jobs %}
+                            <tr>
+                                <td>
+                                    <div class="job-title-text">{{ job.title }}</div>
+                                    <div class="company-name">{{ job.company }}</div>
+                                    <div class="meta-pills">
+                                        <span class="pill pill-type">{{ job.job_type }}</span>
+                                        <span class="pill">&#128205; {{ job.location }}</span>
+                                        {% if job.package %}
+                                            <span class="pill pill-package">{{ job.package }}</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600;">Min CGPA: {{ job.min_cgpa }}</div>
+                                    <div style="color: var(--text-muted); font-size: 0.825rem; margin-top: 0.2rem;">
+                                        Branches: {{ job.eligible_branches }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 500;">{{ job.deadline|date:"N j, Y" }}</div>
+                                </td>
+                                <td>
+                                    {% if job.status == 'Open' %}
+                                        <span class="badge badge-open">
+                                            <span class="badge-dot"></span> Open
+                                        </span>
+                                    {% else %}
+                                        <span class="badge badge-closed">
+                                            <span class="badge-dot"></span> Closed
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">&#128188;</div>
+                    <div class="empty-title">No job postings available</div>
+                    <div class="empty-desc">Use the form on the left to create your first job posting for candidates.</div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

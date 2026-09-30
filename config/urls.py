@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Company management routes (accessible at root / and /companies/)
     path('', include('companies.urls')),
+    path('jobs/', include('jobs.urls')),
 ]
 

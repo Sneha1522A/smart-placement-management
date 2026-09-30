@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ea&)w4)95ewf4hha1u0+3v$-73h5(56y2*nxpvxowl5w++8j2&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Local apps
     'companies',
+    'jobs',
 ]
 
 
@@ -128,3 +129,6 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+LOGIN_URL = '/admin/login/'
+

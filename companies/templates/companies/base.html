@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Company Management{% endblock %} - Smart Placement Management</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{% static 'companies/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'companies:company_list' %}" class="brand-link">
+                <div class="brand-logo">SP</div>
+                <div>
+                    <span class="brand-text">Smart Placement</span>
+                    <span class="brand-badge">SPMS-24</span>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="{% url 'companies:company_list' %}" class="nav-link {% if request.resolver_match.url_name == 'company_list' %}active{% endif %}">
+                    Companies
+                </a>
+                <a href="{% url 'companies:company_create' %}" class="btn btn-primary btn-sm">
+                    + Add Company
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- Django Flash Messages -->
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}">
+                <span>{{ message }}</span>
+                <button type="button" class="alert-dismiss" aria-label="Dismiss message">&times;</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Page Specific Content -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global Delete Confirmation Modal Popup -->
+    <div id="deleteConfirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-dialog">
+            <div class="modal-icon-danger">
+                &#9888;
+            </div>
+            <h3 id="modalTitle" class="modal-title">Delete Company</h3>
+            <p class="modal-text">
+                Are you sure you want to delete <strong id="deleteCompanyName">this company</strong>? 
+                This action is permanent and cannot be undone.
+            </p>
+            <form id="deleteModalForm" method="POST" action="">
+                {% csrf_token %}
+                <div class="modal-actions">
+                    <button type="button" id="cancelDeleteBtn" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        Yes, Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 Smart Placement Management System (SPMS). All rights reserved.</p>
+    </footer>
+
+    <!-- Core JavaScript -->
+    <script src="{% static 'companies/js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

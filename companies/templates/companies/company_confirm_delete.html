@@ -1,0 +1,33 @@
+{% extends 'companies/base.html' %}
+
+{% block title %}Confirm Delete - {{ company.name }}{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 520px; text-align: center;">
+    <div class="modal-icon-danger" style="margin: 0 auto 1.5rem auto;">
+        &#9888;
+    </div>
+    
+    <h1 class="page-title" style="font-size: 1.5rem; margin-bottom: 0.75rem;">Confirm Deletion</h1>
+    
+    <p class="modal-text" style="font-size: 1rem;">
+        Are you sure you want to delete <strong style="color: var(--text-primary);">{{ company.name }}</strong> ({{ company.job_role }})?
+        <br><br>
+        <span style="color: var(--danger); font-size: 0.9rem;">
+            This action cannot be undone and will permanently remove this company's record.
+        </span>
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-actions" style="justify-content: center;">
+            <a href="{% url 'companies:company_list' %}" class="btn btn-secondary">
+                Cancel
+            </a>
+            <button type="submit" class="btn btn-danger">
+                Yes, Delete Company
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
